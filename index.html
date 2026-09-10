@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaktabX - Taqdimot</title>
+    <style>
+        /* ==========================================
+           1. CSS O'ZGARUVCHILARI VA ASOSIY STIL
+           ========================================== */
+        :root {
+            --bg-light: #f8fafc;
+            --primary-blue: #2563eb;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+            --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; }
+
+        /* Orqa fon blur effektlari */
+        .bg-shape { position: absolute; border-radius: 50%; filter: blur(100px); z-index: -1; }
+        .shape-1 { width: 500px; height: 500px; background: rgba(37, 99, 235, 0.15); top: -100px; left: -100px; }
+        .shape-2 { width: 400px; height: 400px; background: rgba(14, 165, 233, 0.15); bottom: -50px; right: -50px; }
+
+        .presentation-container { width: 100%; max-width: 1200px; height: 100vh; position: relative; display: flex; flex-direction: column; }
+        .progress-container { height: 4px; width: 100%; background: rgba(0,0,0,0.05); position: absolute; top: 0; left: 0; z-index: 100; }
+        .progress-bar { height: 100%; background: var(--primary-blue); width: 0%; transition: width var(--transition-smooth); }
+
+        .slides-wrapper { flex: 1; position: relative; width: 100%; padding: 40px; display: flex; justify-content: center; align-items: center; }
+
+        .slide { position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; visibility: hidden; transform: scale(0.98) translateY(20px); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; z-index: 1; }
+        .slide.active { opacity: 1; visibility: visible; transform: scale(1) translateY(0); z-index: 10; }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); border-radius: 20px; padding: 25px; }
+
+        .title-huge { font-size: 4.8rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 10px; }
+        .text-blue { color: var(--primary-blue); }
+        .tagline { font-size: 1.4rem; color: var(--text-muted); font-weight: 400; }
+        .slide-title { font-size: 2.3rem; margin-bottom: 25px; text-align: center; width: 100%; }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; width: 100%; }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 900px; }
+
+        /* Logotiplar va Vektor Rasmlar Uchun Maxsus Stillar */
+        .hero-logo-img { width: 170px; height: 170px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(37, 99, 235, 0.25)); }
+        .card-icon-img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 15px; }
+
+        /* Diagramma va Ierarxiya */
+        .hierarchy-diagram { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 25px; flex-wrap: wrap; }
+        .h-node { background: white; padding: 12px 20px; border-radius: 30px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; gap: 8px; }
+        .h-node img { width: 24px; height: 24px; }
+        .h-arrow { color: var(--primary-blue); font-size: 1.3rem; font-weight: bold; }
+
+        /* O'quvchi Profil Vektor Uslubida (Qiz Bola) */
+        .mockup-container { width: 100%; max-width: 900px; }
+        .profile-mockup { display: flex; gap: 25px; align-items: center; }
+        .profile-left { display: flex; flex-direction: column; align-items: center; min-width: 220px; border-right: 1px solid rgba(0,0,0,0.08); padding-right: 25px; }
+        .avatar-vector { width: 110px; height: 110px; margin-bottom: 12px; }
+        .profile-name { font-size: 1.2rem; margin-bottom: 5px; }
+        .badge { background: #ec4899; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .version-badge { background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-block; margin-bottom: 15px; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .info-item, .info-full { background: white; padding: 10px 14px; border-radius: 10px; font-size: 0.9rem; }
+        .info-item span, .info-full span { color: var(--text-muted); font-size: 0.8rem; display: block; margin-bottom: 2px; }
+
+        /* Dashboard & Browser Vektor */
+        .browser-mockup { padding: 0; overflow: hidden; }
+        .browser-header { background: #e2e8f0; padding: 10px 18px; display: flex; align-items: center; gap: 8px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #ef4444; } .yellow { background: #f59e0b; } .green { background: #10b981; }
+        .url-bar { background: white; margin-left: 15px; padding: 3px 12px; border-radius: 4px; font-size: 0.8rem; color: #94a3b8; }
+        .browser-content { padding: 30px; }
+
+        /* Format belgilari */
+        .format-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: white; }
+        .bg-word { background-color: #1b5296; }
+        .bg-pdf { background-color: #e1251b; }
+        .bg-excel { background-color: #107c41; }
+
+        /* ==========================================
+           2. ILONIZI (ZIGZAG) ROADMAP STIL
+           ========================================== */
+        .zigzag-container { position: relative; width: 100%; max-width: 950px; display: flex; flex-direction: column; gap: 12px; padding: 10px 0; }
+        .zigzag-container::before { content: ''; position: absolute; top: 20px; bottom: 20px; left: 50%; width: 4px; background: rgba(37, 99, 235, 0.2); transform: translateX(-50%); border-radius: 2px; z-index: 1; }
+
+        .zigzag-item { position: relative; width: 50%; display: flex; z-index: 2; }
+        .zigzag-item.left { align-self: flex-start; padding-right: 30px; justify-content: flex-end; }
+        .zigzag-item.right { align-self: flex-end; padding-left: 30px; justify-content: flex-start; }
+
+        .zigzag-card { background: white; border-radius: 16px; padding: 12px 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.05); border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 14px; width: 100%; max-width: 420px; transition: transform 0.3s ease; }
+        .zigzag-card:hover { transform: translateY(-3px); }
+
+        .zigzag-icon { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; background: var(--bg-light); padding: 8px; border-radius: 12px; }
+        .zigzag-content { display: flex; flex-direction: column; }
+        .zigzag-title { font-size: 0.95rem; font-weight: 700; color: var(--primary-blue); display: flex; align-items: center; gap: 8px; }
+        .zigzag-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; margin-top: 2px; }
+
+        .zigzag-badge { background: var(--primary-blue); color: white; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; justify-content: center; align-items: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
+
+        /* Telegram Bot Box */
+        .bot-box { background: rgba(37, 99, 235, 0.08); border: 2px dashed var(--primary-blue); border-radius: 16px; padding: 15px 25px; margin-top: 15px; display: inline-flex; align-items: center; gap: 12px; }
+        .bot-link { font-size: 1.2rem; font-weight: 800; color: var(--primary-blue); text-decoration: none; }
+
+        /* Animatsiyalar */
+        .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .slide.active .fade-up { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.15s; }
+        .delay-2 { transition-delay: 0.3s; }
+
+        /* Controls */
+        .controls { position: absolute; bottom: 20px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+        .nav-controls { display: flex; align-items: center; background: var(--glass-bg); backdrop-filter: blur(10px); padding: 8px; border-radius: 30px; border: 1px solid var(--glass-border); }
+        .control-btn { background: none; border: none; cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text-dark); padding: 8px 16px; border-radius: 20px; }
+        .control-btn:hover { background: white; }
+        .counter { padding: 0 15px; font-weight: 600; color: var(--text-muted); }
+        #fullscreen-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 50%; width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .grid-3 { grid-template-columns: 1fr; gap: 15px; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .title-huge { font-size: 3rem; }
+            .profile-mockup { flex-direction: column; }
+            .profile-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.1); padding-right: 0; padding-bottom: 15px; }
+            .controls { left: 15px; right: 15px; bottom: 15px; }
+            .slide { padding: 20px; padding-bottom: 80px; }
+            
+            .zigzag-container::before { left: 20px; }
+            .zigzag-item { width: 100%; }
+            .zigzag-item.left, .zigzag-item.right { justify-content: flex-start; padding-left: 45px; padding-right: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <div class="presentation-container">
+        <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+
+        <div class="slides-wrapper">
+            
+            <!-- 1-SLAYD: MaktabX Hero -->
+            <div class="slide active">
+                <div style="text-align: center;">
+                    <img src="./ico.png" alt="MaktabX Logotipi" class="hero-logo-img fade-up">
+                    <h1 class="title-huge text-blue fade-up delay-1">MaktabX</h1>
+                    <p class="tagline fade-up delay-2">Maktab ma’lumotlarini boshqarishning sodda va zamonaviy yechimi</p>
+                </div>
+            </div>
+
+            <!-- 2-SLAYD: Muammo -->
+            <div class="slide">
+                <h2 class="slide-title fade-up">Muammo</h2>
+                <div class="grid-3 fade-up delay-1">
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Tarqoq" class="card-icon-img">
+                        <h3>Ma’lumotlar tarqoq</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Qog'ozlar va turli xil jadvallarda saqlanishi.</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="Qidiruv qiyin" class="card-icon-img">
+                        <h3>Topish qiyin</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Kerakli ma’lumotni izlash vaqt va kuch oladi.</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1087/1087927.png" alt="Boshqaruv" class="card-icon-img">
+                        <h3>Boshqaruv zarur</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Yagona markazlashtirilgan raqamli tizim yo'qligi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3-SLAYD: Yechim -->
+            <div class="slide">
+                <h2 class="slide-title fade-up">Yechim</h2>
+                <div class="glass-card fade-up delay-1" style="text-align: center; width: 100%; max-width: 900px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1904/1904425.png" alt="Yechim" class="card-icon-img" style="width: 80px; height: 80px;">
+                    <p class="tagline" style="margin-top: 10px;">MaktabX — maktabdagi zarur ma’lumotlarni yagona tizimga jamlaydi.</p>
+                    
+                    <div class="hierarchy-diagram fade-up delay-2">
+                        <div class="h-node">
+                            <img src="https://cdn-icons-png.flaticon.com/512/6009/6009864.png" alt="Dev">
+                            Dasturchi
+                        </div>
+                        <div class="h-arrow">➔</div>
+                        <div class="h-node">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin">
+                            Administrator
+                        </div>
+                        <div class="h-arrow">➔</div>
+                        <div class="h-node">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995539.png" alt="O'qituvchi">
+                            O‘qituvchi
+                        </div>
+                        <div class="h-arrow">➔</div>
+                        <div class="h-node">
+                            <img src="https://cdn-icons-png.flaticon.com/512/6997/6997662.png" alt="O'quvchi">
+                            O‘quvchi
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4-SLAYD: Foydalanuvchi Rollari -->
+            <div class="slide">
+                <h2 class="slide-title fade-up">Foydalanuvchi rollari</h2>
+                <div class="grid-3 fade-up delay-1">
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6009/6009864.png" alt="Dasturchi" class="card-icon-img">
+                        <h3 class="text-blue">Dasturchi</h3>
+                        <p style="margin-top: 8px; color: var(--text-muted); font-size: 0.9rem;">Tizimni boshqaradi va administratorlarni yaratadi.</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin" class="card-icon-img">
+                        <h3 class="text-blue">Administrator</h3>
+                        <p style="margin-top: 8px; color: var(--text-muted); font-size: 0.9rem;">Sinflar va o‘qituvchilarni boshqaradi.</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1995/1995539.png" alt="O'qituvchi" class="card-icon-img">
+                        <h3 class="text-blue">O‘qituvchi</h3>
+                        <p style="margin-top: 8px; color: var(--text-muted); font-size: 0.9rem;">O‘z sinfidagi o‘quvchilarni boshqaradi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5-SLAYD: O'quvchi Profili -->
+            <div class="slide">
+                <h2 class="slide-title fade-up">O‘quvchi profili</h2>
+                <div class="mockup-container fade-up delay-1">
+                    <div class="profile-mockup glass-card">
+                        <div class="profile-left">
+                            <img src="https://cdn-icons-png.flaticon.com/512/6997/6997662.png" alt="O'quvchi Avatar" class="avatar-vector">
+                            <h3 class="profile-name">Karimova Madina</h3>
+                            <span class="badge">9 "A" sinf</span>
+                        </div>
+                        <div class="profile-right" style="flex: 1;">
+                            <div class="info-grid">
+                                <div class="info-item"><span>Yosh:</span> 15 yosh</div>
+                                <div class="info-item"><span>Tug‘ilgan sana:</span> 14.08.2011</div>
+                                <div class="info-item"><span>Jinsi:</span> Ayol</div>
+                                <div class="info-item"><span>Tug‘ilgan joy:</span> Toshkent</div>
+                                <div class="info-item"><span>Telefon:</span> +998 93 456 78 90</div>
+                                <div class="info-item"><span>Hujjat:</span> AA 9876543</div>
+                            </div>
+                            <div class="info-full">
+                                <span>Ota-ona ma’lumotlari:</span>
+                                Onasi: Karimova Dilnoza (+998 90 111 22 33)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6-SLAYD: O'qituvchi Imkoniyatlari -->
+            <div class="slide">
+                <h2 class="slide-title fade-up">O‘qituvchi imkoniyatlari</h2>
+                <div class="grid-3 fade-up delay-1">
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2815/2815428.png" alt="Export" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">Hujjatlarni Yuklash</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; margin-bottom: 12px;">Ma’lumotlarni bir bosishda kerakli formatda eksport qilish:</p>
+                        <div style="display: flex; gap: 6px; justify-content: center;">
+                            <span class="format-badge bg-word">DOCX</span>
+                            <span class="format-badge bg-pdf">PDF</span>
+                            <span class="format-badge bg-excel">XLSX</span>
+                        </div>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" alt="Qidiruv" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">Aqlli Qidiruv</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">Ism, sinf yoki metr/pasport seriyasi orqali o‘quvchilarni soniyalar ichida topish va filtrlash.</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3588/3588658.png" alt="Boshqaruv" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">Sinf va Profil Boshqaruvi</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">O‘quvchilar ro‘yxatini tahrirlash, yangi o‘quvchi qo‘shish hamda ota-ona kontaktlarini tartiblash.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7-SLAYD: Dizayn -->
+            <div class="slide">
+                <h2 class="slide-title fade-up">Oddiy. Shaffof. Qulay.</h2>
+                <div class="browser-mockup glass-card fade-up delay-1" style="width: 100%; max-width: 850px;">
+                    <div class="browser-header">
+                        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                        <div class="url-bar">maktabx.uz</div>
+                    </div>
+                    <div class="browser-content grid-3">
+                        <div style="text-align: center;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/1087/1087927.png" alt="Minimal" class="card-icon-img">
+                            <h4>Minimalizm</h4>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Glass" class="card-icon-img">
+                            <h4>Glassmorphism</h4>
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2920/2920329.png" alt="Responsive" class="card-icon-img">
+                            <h4>Responsive design</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8-SLAYD: PAROLNI TIKLASH (YANGI QO'SHILDI) -->
+            <div class="slide">
+                <h2 class="slide-title fade-up">Parolni xavfsiz tiklash</h2>
+                <div class="grid-3 fade-up delay-1" style="max-width: 950px;">
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6195/6195699.png" alt="Vaqtinchalik ID" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">1. Vaqtinchalik ID</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
+                            Parol unutilganda, tizim o‘qituvchiga bir martalik maxsus vaqtinchalik ID kod beradi.
+                        </p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Adminga murojaat" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">2. Adminga murojaat</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
+                            O‘qituvchi vaqtinchalik ID orqali maktab administratoriga murojaat qiladi va shaxsini tasdiqlaydi.
+                        </p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png" alt="Yangilash" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">3. Yangi parol</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
+                            Administrator so‘rovni tasdiqlagach, o‘qituvchiga yangi login-parol taqdim etiladi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9-SLAYD: TEZ ORADA: v1.1.0 YANGILANISHI -->
+            <div class="slide">
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <span class="version-badge fade-up">Tez orada: v1.1.0</span>
+                    <h2 class="slide-title fade-up delay-1" style="margin-bottom: 15px;">Kutilayotgan yangilanishlar</h2>
+                </div>
+                <div class="grid-3 fade-up delay-2">
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3059/3059502.png" alt="Ota-ona xabarnomasi" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">1-Tugma orqali Xabar</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">Barcha ota-onalarga bitta tugmani bosish orqali tezkor SMS va bildirishnomalar yuborish tizimi.</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4149/4149678.png" alt="Media Storage Server" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">Bulutli Media Server</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">O‘quvchi va o‘qituvchilarning fotosuratlari hamda hujjatlarini alohida xavfsiz serverda saqlash yechimi.</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1161/1161388.png" alt="Xavfsizlik" class="card-icon-img">
+                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">Xavfsiz Kirish</h3>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">Ikki bosqichli autentifikatsiya (2FA) va xavfsiz avtorizatsiya imkoniyati.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10-SLAYD: ILONIZI DIAGRAMMA (LOYIHA YARATILISH BOSQICHLARI) -->
+            <div class="slide">
+                <h2 class="slide-title fade-up" style="margin-bottom: 10px;">Loyiha yaratilish bosqichlari</h2>
+                
+                <div class="zigzag-container fade-up delay-1">
+                    <!-- Step 1: Chapda -->
+                    <div class="zigzag-item left">
+                        <div class="zigzag-card">
+                            <span class="zigzag-badge">1</span>
+                            <img src="https://cdn-icons-png.flaticon.com/512/12222/12222588.png" alt="ChatGPT" class="zigzag-icon">
+                            <div class="zigzag-content">
+                                <span class="zigzag-title">ChatGPT</span>
+                                <span class="zigzag-desc">G‘oyamni aniq prompt va loyiha arxitekturasiga aylantirdi.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: O'ngda -->
+                    <div class="zigzag-item right">
+                        <div class="zigzag-card">
+                            <span class="zigzag-badge">2</span>
+                            <img src="https://cdn-icons-png.flaticon.com/512/8618/8618881.png" alt="AI Studio" class="zigzag-icon">
+                            <div class="zigzag-content">
+                                <span class="zigzag-title">Google AI Studio</span>
+                                <span class="zigzag-desc">Promptlar orqali veb-saytning to‘liq dasturiy kodlarini yaratdi.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Chapda -->
+                    <div class="zigzag-item left">
+                        <div class="zigzag-card">
+                            <span class="zigzag-badge">3</span>
+                            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968853.png" alt="Firestore" class="zigzag-icon">
+                            <div class="zigzag-content">
+                                <span class="zigzag-title">Firebase Firestore</span>
+                                <span class="zigzag-desc">Barcha foydalanuvchi va maktab ma'lumotlarini saqlash bazasi.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: O'ngda -->
+                    <div class="zigzag-item right">
+                        <div class="zigzag-card">
+                            <span class="zigzag-badge">4</span>
+                            <img src="https://cdn-icons-png.flaticon.com/512/2504/2504911.png" alt="GitHub" class="zigzag-icon">
+                            <div class="zigzag-content">
+                                <span class="zigzag-title">GitHub</span>
+                                <span class="zigzag-desc">Yozilgan loyiha kodlarini saqlash va nazorat qilish platformasi.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Chapda -->
+                    <div class="zigzag-item left">
+                        <div class="zigzag-card">
+                            <span class="zigzag-badge">5</span>
+                            <img src="https://cdn-icons-png.flaticon.com/512/919/919853.png" alt="Vercel" class="zigzag-icon">
+                            <div class="zigzag-content">
+                                <span class="zigzag-title">Vercel Hosting</span>
+                                <span class="zigzag-desc">Loyiha kodlarini avtomatik ravishda global internetga joyladi.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: O'ngda -->
+                    <div class="zigzag-item right">
+                        <div class="zigzag-card">
+                            <span class="zigzag-badge">6</span>
+                            <img src="https://cdn-icons-png.flaticon.com/512/2586/2586488.png" alt="Applix App" class="zigzag-icon">
+                            <div class="zigzag-content">
+                                <span class="zigzag-title">Applix App</span>
+                                <span class="zigzag-desc">Sayt havolasi asosida mobil qurilmalar uchun Web APK yaratdi.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11-SLAYD: Yakun va Saytga kirish (BOT YO'RIQNOMASI) -->
+            <div class="slide">
+                <div style="text-align: center; width: 100%; max-width: 800px;">
+                    <img src="./ico.png" alt="MaktabX Logotipi" class="hero-logo-img fade-up" style="width: 120px; height: 120px; margin-bottom: 10px;">
+                    <h1 class="title-huge text-blue fade-up delay-1" style="font-size: 3.5rem;">MaktabX</h1>
+                    <p class="tagline fade-up delay-1" style="font-size: 1.2rem;">Kerakli ma’lumot — kerakli vaqtda, bir joyda.</p>
+                    
+                    <div class="glass-card fade-up delay-2" style="margin-top: 20px; padding: 20px;">
+                        <h3 style="color: var(--text-dark); margin-bottom: 10px;">Saytdan foydalanish uchun:</h3>
+                        <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.5;">
+                            Telegram’dagi <b>@maktabxbot</b> ga kiring va <b>/start</b> tugmasini bosing!
+                        </p>
+                        <div class="bot-box">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram Bot" style="width: 32px; height: 32px;">
+                            <a href="https://t.me/maktabxbot" target="_blank" class="bot-link">@maktabxbot</a>
+                        </div>
+                    </div>
+
+                    <h3 class="fade-up delay-2" style="margin-top: 20px; font-size: 1.5rem; color: var(--text-dark);">E’tiboringiz uchun rahmat!</h3>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="controls">
+            <button id="fullscreen-btn" title="To'liq ekran">⛶</button>
+            <div class="nav-controls">
+                <button id="prev-btn" class="control-btn">← Oldingi</button>
+                <div id="slide-counter" class="counter">1 / 11</div>
+                <button id="next-btn" class="control-btn">Keyingi →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIKA -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const counterText = document.getElementById('slide-counter');
+            const progressBar = document.getElementById('progress-bar');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function updateSlide() {
+                slides.forEach(s => s.classList.remove('active'));
+                slides[currentSlide].classList.add('active');
+
+                counterText.textContent = `${currentSlide + 1} / ${totalSlides}`;
+                progressBar.style.width = `${(currentSlide / (totalSlides - 1)) * 100}%`;
+
+                prevBtn.style.opacity = currentSlide === 0 ? '0.3' : '1';
+                nextBtn.style.opacity = currentSlide === totalSlides - 1 ? '0.3' : '1';
+            }
+
+            function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateSlide(); } }
+            function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlide(); } }
+
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+                else if (e.key === 'ArrowLeft') prevSlide();
+            });
+
+            fullscreenBtn.addEventListener('click', () => {
+                if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+                else document.exitFullscreen();
+            });
+
+            let touchStartX = 0, touchEndX = 0;
+            document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, false);
+            document.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 50) nextSlide();
+                if (touchEndX - touchStartX > 50) prevSlide();
+            }, false);
+
+            updateSlide();
+        });
+    </script>
+</body>
+</html>
