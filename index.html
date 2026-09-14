@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MaktabX - Taqdimot</title>
     <style>
-        /* ==========================================
-           1. CSS O'ZGARUVCHILARI VA ASOSIY STIL
-           ========================================== */
         :root {
             --bg-light: #f8fafc;
             --primary-blue: #2563eb;
@@ -22,7 +19,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg-light); color: var(--text-dark); overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; }
 
-        /* Orqa fon blur effektlari */
         .bg-shape { position: absolute; border-radius: 50%; filter: blur(100px); z-index: -1; }
         .shape-1 { width: 500px; height: 500px; background: rgba(37, 99, 235, 0.15); top: -100px; left: -100px; }
         .shape-2 { width: 400px; height: 400px; background: rgba(14, 165, 233, 0.15); bottom: -50px; right: -50px; }
@@ -44,20 +40,18 @@
         .slide-title { font-size: 2.3rem; margin-bottom: 25px; text-align: center; width: 100%; }
 
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; width: 100%; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; max-width: 1050px; }
         .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; max-width: 900px; }
 
-        /* Logotiplar va Vektor Rasmlar Uchun Maxsus Stillar */
         .hero-logo-img { width: 170px; height: 170px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 10px 20px rgba(37, 99, 235, 0.25)); }
         .card-icon-img { width: 70px; height: 70px; object-fit: contain; margin-bottom: 15px; }
 
-        /* Diagramma va Ierarxiya */
         .hierarchy-diagram { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 25px; flex-wrap: wrap; }
         .h-node { background: white; padding: 12px 20px; border-radius: 30px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; align-items: center; gap: 8px; }
         .h-node img { width: 24px; height: 24px; }
         .h-arrow { color: var(--primary-blue); font-size: 1.3rem; font-weight: bold; }
 
-        /* O'quvchi Profil Vektor Uslubida (Qiz Bola) */
-        .mockup-container { width: 100%; max-width: 900px; }
+        .mockup-container { width: 100%; max-width: 950px; }
         .profile-mockup { display: flex; gap: 25px; align-items: center; }
         .profile-left { display: flex; flex-direction: column; align-items: center; min-width: 220px; border-right: 1px solid rgba(0,0,0,0.08); padding-right: 25px; }
         .avatar-vector { width: 110px; height: 110px; margin-bottom: 12px; }
@@ -65,11 +59,11 @@
         .badge { background: #ec4899; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
         .version-badge { background: #10b981; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-block; margin-bottom: 15px; }
         
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        .info-item, .info-full { background: white; padding: 10px 14px; border-radius: 10px; font-size: 0.9rem; }
-        .info-item span, .info-full span { color: var(--text-muted); font-size: 0.8rem; display: block; margin-bottom: 2px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .info-item, .info-full { background: white; padding: 8px 12px; border-radius: 10px; font-size: 0.85rem; }
+        .info-item span, .info-full span { color: var(--text-muted); font-size: 0.75rem; display: block; margin-bottom: 2px; }
+        .info-highlight { background: #eff6ff; border: 1px solid #bfdbfe; }
 
-        /* Dashboard & Browser Vektor */
         .browser-mockup { padding: 0; overflow: hidden; }
         .browser-header { background: #e2e8f0; padding: 10px 18px; display: flex; align-items: center; gap: 8px; }
         .dot { width: 10px; height: 10px; border-radius: 50%; }
@@ -77,15 +71,11 @@
         .url-bar { background: white; margin-left: 15px; padding: 3px 12px; border-radius: 4px; font-size: 0.8rem; color: #94a3b8; }
         .browser-content { padding: 30px; }
 
-        /* Format belgilari */
         .format-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; color: white; }
         .bg-word { background-color: #1b5296; }
         .bg-pdf { background-color: #e1251b; }
         .bg-excel { background-color: #107c41; }
 
-        /* ==========================================
-           2. ILONIZI (ZIGZAG) ROADMAP STIL
-           ========================================== */
         .zigzag-container { position: relative; width: 100%; max-width: 950px; display: flex; flex-direction: column; gap: 12px; padding: 10px 0; }
         .zigzag-container::before { content: ''; position: absolute; top: 20px; bottom: 20px; left: 50%; width: 4px; background: rgba(37, 99, 235, 0.2); transform: translateX(-50%); border-radius: 2px; z-index: 1; }
 
@@ -103,17 +93,14 @@
 
         .zigzag-badge { background: var(--primary-blue); color: white; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; justify-content: center; align-items: center; font-size: 0.75rem; font-weight: 800; flex-shrink: 0; }
 
-        /* Telegram Bot Box */
         .bot-box { background: rgba(37, 99, 235, 0.08); border: 2px dashed var(--primary-blue); border-radius: 16px; padding: 15px 25px; margin-top: 15px; display: inline-flex; align-items: center; gap: 12px; }
         .bot-link { font-size: 1.2rem; font-weight: 800; color: var(--primary-blue); text-decoration: none; }
 
-        /* Animatsiyalar */
         .fade-up { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
         .slide.active .fade-up { opacity: 1; transform: translateY(0); }
         .delay-1 { transition-delay: 0.15s; }
         .delay-2 { transition-delay: 0.3s; }
 
-        /* Controls */
         .controls { position: absolute; bottom: 20px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
         .nav-controls { display: flex; align-items: center; background: var(--glass-bg); backdrop-filter: blur(10px); padding: 8px; border-radius: 30px; border: 1px solid var(--glass-border); }
         .control-btn { background: none; border: none; cursor: pointer; font-size: 0.95rem; font-weight: 600; color: var(--text-dark); padding: 8px 16px; border-radius: 20px; }
@@ -122,14 +109,13 @@
         #fullscreen-btn { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 50%; width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; cursor: pointer; }
 
         @media (max-width: 768px) {
-            .grid-3 { grid-template-columns: 1fr; gap: 15px; }
+            .grid-3, .grid-4 { grid-template-columns: 1fr; gap: 15px; }
             .grid-2 { grid-template-columns: 1fr; }
             .title-huge { font-size: 3rem; }
             .profile-mockup { flex-direction: column; }
             .profile-left { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.1); padding-right: 0; padding-bottom: 15px; }
             .controls { left: 15px; right: 15px; bottom: 15px; }
             .slide { padding: 20px; padding-bottom: 80px; }
-            
             .zigzag-container::before { left: 20px; }
             .zigzag-item { width: 100%; }
             .zigzag-item.left, .zigzag-item.right { justify-content: flex-start; padding-left: 45px; padding-right: 0; }
@@ -146,7 +132,7 @@
 
         <div class="slides-wrapper">
             
-            <!-- 1-SLAYD: MaktabX Hero -->
+            <!-- 1-SLAYD -->
             <div class="slide active">
                 <div style="text-align: center;">
                     <img src="./ico.png" alt="MaktabX Logotipi" class="hero-logo-img fade-up">
@@ -155,7 +141,7 @@
                 </div>
             </div>
 
-            <!-- 2-SLAYD: Muammo -->
+            <!-- 2-SLAYD -->
             <div class="slide">
                 <h2 class="slide-title fade-up">Muammo</h2>
                 <div class="grid-3 fade-up delay-1">
@@ -177,7 +163,7 @@
                 </div>
             </div>
 
-            <!-- 3-SLAYD: Yechim -->
+            <!-- 3-SLAYD -->
             <div class="slide">
                 <h2 class="slide-title fade-up">Yechim</h2>
                 <div class="glass-card fade-up delay-1" style="text-align: center; width: 100%; max-width: 900px;">
@@ -185,30 +171,18 @@
                     <p class="tagline" style="margin-top: 10px;">MaktabX — maktabdagi zarur ma’lumotlarni yagona tizimga jamlaydi.</p>
                     
                     <div class="hierarchy-diagram fade-up delay-2">
-                        <div class="h-node">
-                            <img src="https://cdn-icons-png.flaticon.com/512/6009/6009864.png" alt="Dev">
-                            Dasturchi
-                        </div>
+                        <div class="h-node"><img src="https://cdn-icons-png.flaticon.com/512/6009/6009864.png" alt="Dev">Dasturchi</div>
                         <div class="h-arrow">➔</div>
-                        <div class="h-node">
-                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin">
-                            Administrator
-                        </div>
+                        <div class="h-node"><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin">Administrator</div>
                         <div class="h-arrow">➔</div>
-                        <div class="h-node">
-                            <img src="https://cdn-icons-png.flaticon.com/512/1995/1995539.png" alt="O'qituvchi">
-                            O‘qituvchi
-                        </div>
+                        <div class="h-node"><img src="https://cdn-icons-png.flaticon.com/512/1995/1995539.png" alt="O'qituvchi">O‘qituvchi</div>
                         <div class="h-arrow">➔</div>
-                        <div class="h-node">
-                            <img src="https://cdn-icons-png.flaticon.com/512/6997/6997662.png" alt="O'quvchi">
-                            O‘quvchi
-                        </div>
+                        <div class="h-node"><img src="https://cdn-icons-png.flaticon.com/512/6997/6997662.png" alt="O'quvchi">O‘quvchi</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 4-SLAYD: Foydalanuvchi Rollari -->
+            <!-- 4-SLAYD -->
             <div class="slide">
                 <h2 class="slide-title fade-up">Foydalanuvchi rollari</h2>
                 <div class="grid-3 fade-up delay-1">
@@ -230,7 +204,7 @@
                 </div>
             </div>
 
-            <!-- 5-SLAYD: O'quvchi Profili -->
+            <!-- 5-SLAYD: O'QUVCHI PROFILI (YANGILANDI) -->
             <div class="slide">
                 <h2 class="slide-title fade-up">O‘quvchi profili</h2>
                 <div class="mockup-container fade-up delay-1">
@@ -242,11 +216,11 @@
                         </div>
                         <div class="profile-right" style="flex: 1;">
                             <div class="info-grid">
-                                <div class="info-item"><span>Yosh:</span> 15 yosh</div>
-                                <div class="info-item"><span>Tug‘ilgan sana:</span> 14.08.2011</div>
-                                <div class="info-item"><span>Jinsi:</span> Ayol</div>
-                                <div class="info-item"><span>Tug‘ilgan joy:</span> Toshkent</div>
+                                <div class="info-item"><span>Tug‘ilgan sana:</span> 14.08.2011 (15 yosh)</div>
                                 <div class="info-item"><span>Telefon:</span> +998 93 456 78 90</div>
+                                <div class="info-item info-highlight"><span>O‘quv markazi:</span> "Najot Ta'lim" (IT & Matematika)</div>
+                                <div class="info-item info-highlight"><span>Kundalik.com Login:</span> madina_k2011</div>
+                                <div class="info-item info-highlight"><span>Kundalik.com Parol:</span> ••••••••</div>
                                 <div class="info-item"><span>Hujjat:</span> AA 9876543</div>
                             </div>
                             <div class="info-full">
@@ -258,7 +232,7 @@
                 </div>
             </div>
 
-            <!-- 6-SLAYD: O'qituvchi Imkoniyatlari -->
+            <!-- 6-SLAYD -->
             <div class="slide">
                 <h2 class="slide-title fade-up">O‘qituvchi imkoniyatlari</h2>
                 <div class="grid-3 fade-up delay-1">
@@ -285,7 +259,7 @@
                 </div>
             </div>
 
-            <!-- 7-SLAYD: Dizayn -->
+            <!-- 7-SLAYD -->
             <div class="slide">
                 <h2 class="slide-title fade-up">Oddiy. Shaffof. Qulay.</h2>
                 <div class="browser-mockup glass-card fade-up delay-1" style="width: 100%; max-width: 850px;">
@@ -310,35 +284,55 @@
                 </div>
             </div>
 
-            <!-- 8-SLAYD: PAROLNI TIKLASH (YANGI QO'SHILDI) -->
+            <!-- 8-SLAYD: XAVFSIZLIK VA PAROL TIKLASH (YANGILANDI - GRID 4 BAJARILDI) -->
+            <!-- 8-SLAYD: XAVFSIZLIK VA PAROL TIKLASH (YANGILANDI) -->
             <div class="slide">
-                <h2 class="slide-title fade-up">Parolni xavfsiz tiklash</h2>
-                <div class="grid-3 fade-up delay-1" style="max-width: 950px;">
-                    <div class="glass-card" style="text-align: center;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/6195/6195699.png" alt="Vaqtinchalik ID" class="card-icon-img">
-                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">1. Vaqtinchalik ID</h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
-                            Parol unutilganda, tizim o‘qituvchiga bir martalik maxsus vaqtinchalik ID kod beradi.
+                <h2 class="slide-title fade-up">Xavfsizlik va Kirish Nazorati</h2>
+                <div class="grid-4 fade-up delay-1">
+                    <div class="glass-card" style="text-align: center; padding: 18px 12px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6195/6195699.png" alt="Vaqtinchalik ID" class="card-icon-img" style="width: 50px; height: 50px;">
+                        <h3 class="text-blue" style="font-size: 0.95rem; margin-bottom: 6px;">1. Vaqtinchalik ID</h3>
+                        <p style="color: var(--text-muted); font-size: 0.78rem; line-height: 1.3;">
+                            Parol unutilganda tizim bir martalik maxsus vaqtinchalik ID beradi.
                         </p>
                     </div>
-                    <div class="glass-card" style="text-align: center;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Adminga murojaat" class="card-icon-img">
-                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">2. Adminga murojaat</h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
-                            O‘qituvchi vaqtinchalik ID orqali maktab administratoriga murojaat qiladi va shaxsini tasdiqlaydi.
+                    <div class="glass-card" style="text-align: center; padding: 18px 12px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Adminga murojaat" class="card-icon-img" style="width: 50px; height: 50px;">
+                        <h3 class="text-blue" style="font-size: 0.95rem; margin-bottom: 6px;">2. Admin Murojaat</h3>
+                        <p style="color: var(--text-muted); font-size: 0.78rem; line-height: 1.3;">
+                            O‘qituvchi ID orqali adminga murojaat qilib yangi parol oladi.
                         </p>
                     </div>
-                    <div class="glass-card" style="text-align: center;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png" alt="Yangilash" class="card-icon-img">
-                        <h3 class="text-blue" style="font-size: 1.1rem; margin-bottom: 8px;">3. Yangi parol</h3>
-                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
-                            Administrator so‘rovni tasdiqlagach, o‘qituvchiga yangi login-parol taqdim etiladi.
+                    <div class="glass-card" style="text-align: center; padding: 18px 12px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/6195/6195700.png" alt="PIN Kod" class="card-icon-img" style="width: 50px; height: 50px;">
+                        <h3 class="text-blue" style="font-size: 0.95rem; margin-bottom: 6px;">3. Majburiy PIN Kod</h3>
+                        <p style="color: var(--text-muted); font-size: 0.78rem; line-height: 1.3;">
+                            Platformaga har safar tezkor kirish uchun shaxsiy majburiy PIN belgilash.
+                        </p>
+                    </div>
+                    <div class="glass-card" style="text-align: center; padding: 18px 12px;">
+                        <!-- SVG Face ID Ikonkasi (Muammosiz va har doim ko'rinadi) -->
+                        <div style="width: 50px; height: 50px; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 7V5a2 2 0 0 1 2-2h2"></path>
+                                <path d="M16 3h2a2 2 0 0 1 2 2v2"></path>
+                                <path d="M4 17v2a2 2 0 0 0 2 2h2"></path>
+                                <path d="M16 21h2a2 2 0 0 0 2-2v-2"></path>
+                                <path d="M9 9h.01"></path>
+                                <path d="M15 9h.01"></path>
+                                <path d="M10 13c.5.5 1.5 1 2 1s1.5-.5 2-1"></path>
+                                <path d="M12 17a3 3 0 0 0 3-3"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-blue" style="font-size: 0.95rem; margin-bottom: 6px;">4. Biometrik Face ID</h3>
+                        <p style="color: var(--text-muted); font-size: 0.78rem; line-height: 1.3;">
+                            Mobil va zamonaviy qurilmalarda Yuz orqali lahzada autentifikatsiya.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- 9-SLAYD: TEZ ORADA: v1.1.0 YANGILANISHI -->
+            <!-- 9-SLAYD -->
             <div class="slide">
                 <div style="text-align: center; margin-bottom: 10px;">
                     <span class="version-badge fade-up">Tez orada: v1.1.0</span>
@@ -363,12 +357,11 @@
                 </div>
             </div>
 
-            <!-- 10-SLAYD: ILONIZI DIAGRAMMA (LOYIHA YARATILISH BOSQICHLARI) -->
+            <!-- 10-SLAYD -->
             <div class="slide">
                 <h2 class="slide-title fade-up" style="margin-bottom: 10px;">Loyiha yaratilish bosqichlari</h2>
                 
                 <div class="zigzag-container fade-up delay-1">
-                    <!-- Step 1: Chapda -->
                     <div class="zigzag-item left">
                         <div class="zigzag-card">
                             <span class="zigzag-badge">1</span>
@@ -380,7 +373,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: O'ngda -->
                     <div class="zigzag-item right">
                         <div class="zigzag-card">
                             <span class="zigzag-badge">2</span>
@@ -392,7 +384,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Chapda -->
                     <div class="zigzag-item left">
                         <div class="zigzag-card">
                             <span class="zigzag-badge">3</span>
@@ -404,7 +395,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 4: O'ngda -->
                     <div class="zigzag-item right">
                         <div class="zigzag-card">
                             <span class="zigzag-badge">4</span>
@@ -416,7 +406,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 5: Chapda -->
                     <div class="zigzag-item left">
                         <div class="zigzag-card">
                             <span class="zigzag-badge">5</span>
@@ -428,7 +417,6 @@
                         </div>
                     </div>
 
-                    <!-- Step 6: O'ngda -->
                     <div class="zigzag-item right">
                         <div class="zigzag-card">
                             <span class="zigzag-badge">6</span>
@@ -442,7 +430,7 @@
                 </div>
             </div>
 
-            <!-- 11-SLAYD: Yakun va Saytga kirish (BOT YO'RIQNOMASI) -->
+            <!-- 11-SLAYD -->
             <div class="slide">
                 <div style="text-align: center; width: 100%; max-width: 800px;">
                     <img src="./ico.png" alt="MaktabX Logotipi" class="hero-logo-img fade-up" style="width: 120px; height: 120px; margin-bottom: 10px;">
@@ -476,7 +464,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIKA -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const slides = document.querySelectorAll('.slide');
